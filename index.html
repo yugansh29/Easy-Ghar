@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Automation Ground Station</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Home Automation Control</h1>
+    <div>
+        <h2>Light Control</h2>
+        <button onclick="controlDevice('light', 'on')">Turn On</button>
+        <button onclick="controlDevice('light', 'off')">Turn Off</button>
+    </div>
+    <div>
+        <h2>Thermostat Control</h2>
+        <input type="number" id="thermostat" placeholder="Set temperature">
+        <button onclick="setTemperature()">Set Temperature</button>
+    </div>
+    <div>
+        <h2>Security System Control</h2>
+        <button onclick="controlDevice('security', 'activate')">Activate</button>
+        <button onclick="controlDevice('security', 'deactivate')">Deactivate</button>
+    </div>
+
+    <script>
+        function controlDevice(device, action) {
+            $.ajax({
+                url: "/control",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ device: device, action: action }),
+                success: function(response) {
+                    alert(response.message);
+                }
+            });
+        }
+
+        function setTemperature() {
+            const temp = document.getElementById("thermostat").value;
+            controlDevice('thermostat', temp);
+        }
+    </script>
+</body>
+</html>
